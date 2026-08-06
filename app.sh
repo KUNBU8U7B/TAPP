@@ -17,15 +17,16 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-echo -e "${GREEN}[*] Memuat daftar aplikasi HP...${NC}"
+echo -e "${GREEN}[*] Memuat seluruh aplikasi HP...${NC}"
 
-# Mengambil daftar package aplikasi bawaan android
-SELECTED_PACKAGE=$(pm list packages -3 | sed 's/package://' | fzf --prompt="📱 Pilih Package Aplikasi: ")
+# Mengambil SELURUH aplikasi (tanpa batasan -3)
+APPS=$(cmd package list packages 2>/dev/null | sed 's/package://' | sort)
+
+# Buka pencarian interaktif via fzf
+SELECTED_PACKAGE=$(echo "$APPS" | fzf --prompt="📱 Cari & Pilih Aplikasi: ")
 
 if [ -n "$SELECTED_PACKAGE" ]; then
     echo -e "${GREEN}[✓] Membuka $SELECTED_PACKAGE...${NC}"
-    
-    # Buka aplikasi menggunakan monkey
     monkey -p "$SELECTED_PACKAGE" -c android.intent.category.LAUNCHER 1 > /dev/null 2>&1
 else
     echo -e "${RED}[!] Batal memilih aplikasi.${NC}"

@@ -35,5 +35,5 @@ if [ -n "$SELECTED_PACKAGE" ]; then
         monkey -p "$SELECTED_PACKAGE" -c android.intent.category.LAUNCHER 1 > /dev/null 2>&1
     fi
 else
-    echo -e "${RED}[!] Batal memilih aplikasi.${NC}"
+    echo -e "${RED}[!] Batal memilih aplikasi.${NC}k"
 fi

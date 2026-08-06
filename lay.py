@@ -1,34 +1,72 @@
 import subprocess
 import sys
-import inquirer
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.prompt import Prompt
 
-def main():
-    print("======================================")
-    print("     PEMANGGIL APLIKASI HP (LIST)     ")
-    print("======================================")
+console = Console()
 
+def get_apps():
     try:
         cmd_output = subprocess.check_output("cmd package list packages -3", shell=True, text=True)
         packages = [line.replace("package:", "").strip() for line in cmd_output.strip().split("\n") if line]
         packages.sort()
+        return packages
     except Exception as e:
-        print(f"[!] Gagal mengambil daftar aplikasi: {e}")
+        console.print(f"[bold red][!] Gagal mengambil aplikasi: {e}[/bold red]")
         sys.exit(1)
 
-    questions = [
-        inquirer.List(
-            'package',
-            message="Pilih aplikasi yang ingin dibuka",
-            choices=packages,
-        ),
-    ]
+def main():
+    console.clear()
     
-    answers = inquirer.prompt(questions)
+    # Header Banner TUI
+    banner = Panel.fit(
+        "[bold cyan]📱 LAUNCHER APLIKASI HP[/bold cyan]\n[dim]TUI Version - Ultra Light[/dim]",
+        border_style="magenta"
+    )
+    console.print(banner)
+
+    packages = get_apps()
+
+    # Buat Tabel TUI yang Rapi
+    table = Table(title="[bold green]Daftar Aplikasi Pihak Ke-3[/bold green]", show_header=True, header_style="bold yellow")
+    table.add_column("No", justify="center", style="cyan", no_wrap=True)
+    table.add_column("Package Name", style="white")
+
+    for idx, pkg in enumerate(packages, start=1):
+        table.add_row(str(idx), pkg)
+
+    console.print(table)
+    console.print()
+
+    # Input Pilihan
+    choice = Prompt.ask("[bold choice]Pilih Nomor / Nama Aplikasi[/bold choice] (q untuk keluar)")
+
+    if choice.lower() == 'q':
+        console.print("[yellow]Batal memilih. Keluar...[/yellow]")
+        sys.exit(0)
+
+    selected_package = ""
     
-    if answers and answers['package']:
-        selected = answers['package']
-        print(f"[+] Membuka {selected}...")
-        subprocess.run(f"termux-open-url android-app://{selected}", shell=True)
+    # Jika input berupa angka
+    if choice.isdigit():
+        num = int(choice)
+        if 1 <= num <= len(packages):
+            selected_package = packages[num - 1]
+    else:
+        # Jika user mengetik sebagian nama package
+        matches = [p for p in packages if choice.lower() in p.lower()]
+        if matches:
+            selected_package = matches[0]
+
+    if selected_package:
+        console.print(Panel(f"[bold green]✓ Membuka {selected_package}...[/bold green]", border_style="green"))
+        
+        # Eksekusi Buka App
+        subprocess.run(f"termux-open-url android-app://{selected_package}", shell=True)
+    else:
+        console.print("[bold red][!] Aplikasi tidak ditemukan![/bold red]")
 
 if __name__ == "__main__":
     main()

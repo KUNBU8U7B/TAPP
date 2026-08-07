@@ -2,3 +2,23 @@ Screen {
     background: #0f172a;
     align: center middle;
 }
+
+#kotak-launcher {
+    width: 80%;
+    height: 12;
+    border: heavy #06b6d4;
+    background: #1e293b;
+    padding: 1 2;
+}
+
+Button {
+    margin-top: 1;
+    width: 100%;
+    background: #0284c7;
+    color: white;
+}
+
+Button:hover {
+    background: #38bdf8;
+    color: black;
+}

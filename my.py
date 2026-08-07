@@ -10,7 +10,7 @@ class Launcher(App):
             "Tampilan ini diatur 100% dari file [yellow]style.tcss[/yellow]!",
             id="kotak-launcher"
         )
-        yield Button("Buka APP")
+        yield Button("Buka APP" , id="btn-open")
         yield Footer()
 
 if __name__ == "__main__" :

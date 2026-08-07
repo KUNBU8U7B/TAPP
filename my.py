@@ -1,5 +1,5 @@
 from textual.app import App , ComposeResult
-from textual.weights import Header , Footer , Button , Static
+from textual.widgets import Header , Footer , Button , Static
 
 class Launcher(App):
     CSS_PATH = "style.tcss" # import file css

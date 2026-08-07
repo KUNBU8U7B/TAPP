@@ -1,0 +1,4 @@
+Screen {
+    background: #0f172a;
+    align: center middle;
+}

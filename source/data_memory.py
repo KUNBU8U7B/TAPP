@@ -11,8 +11,8 @@ def cek_ram():
             info_ram[kunci] = nilai
 
     Total_kb     = info_ram.get('MemTotal' , 0)
-    Availabel_kb = info_ram.get('MemAvailabel' , 0)
-    Used_kb      = Total_kb - Availabel_kb
+    Available_kb = info_ram.get('MemAvailable' , 0)
+    Used_kb      = Total_kb - Available_kb
 
     Total_gb     = Total_kb / (1024 * 1024)
     Used_gb      = Used_kb / (1024 * 1024)

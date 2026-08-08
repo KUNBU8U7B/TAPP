@@ -16,6 +16,7 @@ Button {
     width: 10%;
     background: #0284c7;
     color: white;
+    border: ;
 }
 
 Button:hover {
